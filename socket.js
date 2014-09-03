@@ -5,7 +5,7 @@ module.exports = function(io, twitter) {
 		string = string.trim(' ');
 		var wordArray = string.split(' ');
 		// Iterate through wordArray and remove username and dash
-		// Also removes "empty" words caused by users spacing incorrectly
+		// Doesn't remove empty words ("") but that shouldn't be a problem
 		for (var i = 0; i < wordArray.length; i++) {
 			if (wordArray[i][0] === '@' || wordArray[i] === '-' || wordArray[i].length === 0) {
 				wordArray.splice(i, 1);
@@ -20,7 +20,9 @@ module.exports = function(io, twitter) {
 			console.log('Twitter connection established');
 		});
 		stream.on('tweet', function(tweet) {
-			console.log(tweetParser(tweet.text));
+			keywordArray = tweetParser(tweet.text);
+			console.log(keywordArray);
+			require('./spotify.js')(keywordArray);
 		});
 	});
 }

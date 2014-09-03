@@ -5,7 +5,6 @@ var express = require('express'),
 	cookieParser = require('cookie-parser'),
 	bodyParser = require('body-parser'),
 	session = require('express-session'),
-	spotify = require('spotify-web'),
 	socketio = require('socket.io'),
 	http = require('http'),
 	Twit = require('twit');
