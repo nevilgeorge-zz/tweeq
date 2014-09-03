@@ -1,14 +1,17 @@
 // socket.js
 
 module.exports = function(io, twitter) {
-	var stream = twitter.stream('statuses/filter', { track: '#neviliscool' });
+	var tweetParser = function(string) {
+
+	}
+	var stream = twitter.stream('statuses/filter', { track: '@__nevil' });
 	io.on('connection', function(socket) {
 		console.log('socket.io connection established!');
 		stream.on('connect', function(request) {
 			console.log('Twitter connection established');
 		});
 		stream.on('tweet', function(tweet) {
-			console.log(tweet);
+			tweetParser(tweet.text);
 		});
 	});
 }
