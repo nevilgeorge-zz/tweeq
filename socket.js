@@ -9,6 +9,7 @@ module.exports = function(io, twitter) {
 				wordArray.splice(i, 1);
 			}
 		}
+		return wordArray;
 	};
 	var stream = twitter.stream('statuses/filter', { track: '@__nevil' });
 	io.on('connection', function(socket) {
