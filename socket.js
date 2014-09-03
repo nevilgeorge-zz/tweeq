@@ -2,10 +2,12 @@
 
 module.exports = function(io, twitter) {
 	var tweetParser = function(string) {
+		string = string.trim(' ');
 		var wordArray = string.split(' ');
 		// Iterate through wordArray and remove username and dash
+		// Also removes "empty" words caused by users spacing incorrectly
 		for (var i = 0; i < wordArray.length; i++) {
-			if (wordArray[i][0] === '@' || wordArray[i] === '-') {
+			if (wordArray[i][0] === '@' || wordArray[i] === '-' || wordArray[i].length === 0) {
 				wordArray.splice(i, 1);
 			}
 		}
@@ -18,7 +20,7 @@ module.exports = function(io, twitter) {
 			console.log('Twitter connection established');
 		});
 		stream.on('tweet', function(tweet) {
-			tweetParser(tweet.text);
+			console.log(tweetParser(tweet.text));
 		});
 	});
 }
