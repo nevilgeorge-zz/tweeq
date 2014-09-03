@@ -35,7 +35,7 @@ var twitter = new Twit({
 });
 
 // pass the io instance into the file that handles all socket.io operations
-require('./socket.js')(io);
+require('./socket.js')(io, twitter);
 
 // listen on port 3030
 server.listen(3030, function() {
