@@ -3,6 +3,7 @@
   "main": "app.js",
   "version": "0.0.1",
   "dependencies": {
+    "async": "^0.9.0",
     "bcrypt-nodejs": "latest",
     "body-parser": "~1.0.0",
     "connect-flash": "~0.1.1",

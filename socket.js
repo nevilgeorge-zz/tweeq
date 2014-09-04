@@ -11,7 +11,8 @@ module.exports = function(io, twitter) {
 				wordArray.splice(i, 1);
 			}
 		}
-		return wordArray;
+		// returns a concatenated string to be used as a query
+		return wordArray.join(' ');
 	};
 	var stream = twitter.stream('statuses/filter', { track: '@__nevil' });
 	io.on('connection', function(socket) {
@@ -20,9 +21,9 @@ module.exports = function(io, twitter) {
 			console.log('Twitter connection established');
 		});
 		stream.on('tweet', function(tweet) {
-			keywordArray = tweetParser(tweet.text);
-			console.log(keywordArray);
-			require('./spotify.js')(keywordArray);
+			var query = tweetParser(tweet.text);
+			console.log(query);
+			require('./spotify.js')(query);
 		});
 	});
 }

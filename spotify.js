@@ -5,7 +5,7 @@ var Spotify = require('spotify-web'),
 	Speaker = require('speaker'),
 	login = require('./loginCredentials.js');
 
-module.exports = function(keywordArray) {
+module.exports = function(query) {
 	var username = login.spotify.username,
 		password = login.spotify.password,
 		uri = 'spotify:track:6tdp8sdXrXlPV6AZZN2PE8';
