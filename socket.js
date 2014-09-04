@@ -2,6 +2,7 @@
 
 module.exports = function(io, twitter) {
 	var tweetParser = function(string) {
+		// remove white spaces for both sides of the text
 		string = string.trim(' ');
 		var wordArray = string.split(' ');
 		// Iterate through wordArray and remove username and dash
