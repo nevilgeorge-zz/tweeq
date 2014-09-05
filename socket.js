@@ -23,7 +23,7 @@ module.exports = function(io, twitter) {
 		});
 		stream.on('tweet', function(tweet) {
 			var query = tweetParser(tweet.text);
-			console.log(query);
+			// pass in the query string to the file that deals with the spotify web API
 			require('./spotify.js')(query);
 		});
 	});

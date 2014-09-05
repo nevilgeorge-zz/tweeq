@@ -12,8 +12,9 @@ var trackPlaying = false;
 module.exports = function(query) {
 	var trackID, uri,
 		username = login.spotify.username,
-		password = login.spotify.password,
-		query = 'work out j cole';
+		password = login.spotify.password;
+
+		console.log('Keywords searched for:' + query);
 
 		Spotify.login(username, password, function(err, spotify) {
 			if (err) {
