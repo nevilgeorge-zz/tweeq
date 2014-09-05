@@ -48,7 +48,7 @@ module.exports = function(query) {
 					}
 
 					console.log('Found!');
-					if (!trackPlaying && typeof(track) !== undefined) {
+					if (!trackPlaying && typeof track !== 'undefined') {
 						playTrack(track);
 					} else {
 						enqueue(playQueue, track);
@@ -65,7 +65,6 @@ var enqueue = function(playQueue, uri) {
 },
 dequeue = function(playQueue) {
 	return playQueue.shift();
-
 };
 
 var playTrack = function(track) {
@@ -77,7 +76,7 @@ var playTrack = function(track) {
 	.on('finish', function() {
 		trackPlaying = false;
 		nextTrack = dequeue(playQueue);
-		if (typeof(nextTrack) !== undefined) {
+		if (typeof nextTrack !== 'undefined') {
 			console.log('Getting next track...');
 			playTrack(nextTrack);
 		} else {
