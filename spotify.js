@@ -7,11 +7,12 @@ var Spotify = require('spotify-web'),
 	async = require('async'),
 	login = require('./loginCredentials.js');
 
+var trackPlaying = false;
+
 module.exports = function(query) {
 	var trackID, uri,
 		username = login.spotify.username,
 		password = login.spotify.password,
-		//uri = 'spotify:track:6tdp8sdXrXlPV6AZZN2PE8',
 		query = 'work out j cole';
 
 		Spotify.login(username, password, function(err, spotify) {
@@ -34,23 +35,27 @@ module.exports = function(query) {
 
 			setTimeout(function() {
 				uri = Spotify.id2uri('track', trackID);
-			}, 1500);
+			}, 1000);
 
 			setTimeout(function() {
 				spotify.get(uri, function(err, track) {
 					if (err) {
 						throw err;
 					}
-					console.log('Playing: %s - %s', track.artist[0].name, track.name);
 
-					track.play()
-					.pipe(new lame.Decoder())
-					.pipe(new Speaker())
-					.on('finish', function() {
-						console.log('Track finished.');
-					});
+					if (!trackPlaying) {
+						console.log('Playing: %s - %s', track.artist[0].name, track.name);
+						trackPlaying = true;
+						track.play()
+							.pipe(new lame.Decoder())
+							.pipe(new Speaker())
+							.on('finish', function() {
+								trackPlaying = false;
+								console.log('Track finished.');
+							});
+					}
 				});
-			}, 2000);
+			}, 1500);
 
 		});
 };
