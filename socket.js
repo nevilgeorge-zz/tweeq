@@ -17,7 +17,7 @@ module.exports = function(io, twitter) {
 	};
 	var stream = twitter.stream('statuses/filter', { track: '@__nevil' });
 	io.on('connection', function(socket) {
-		console.log('socket.io connection established!');
+		console.log('Listening for tweets...');
 		stream.on('connect', function(request) {
 			console.log('Twitter connection established');
 		});

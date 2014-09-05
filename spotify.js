@@ -7,14 +7,15 @@ var Spotify = require('spotify-web'),
 	async = require('async'),
 	login = require('./loginCredentials.js');
 
-var trackPlaying = false;
+var trackPlaying = false,
+	playQueue = [];
 
 module.exports = function(query) {
 	var trackID, uri,
 		username = login.spotify.username,
 		password = login.spotify.password;
 
-		console.log('Keywords searched for:' + query);
+		console.log('Keywords searched for: ' + query);
 
 		Spotify.login(username, password, function(err, spotify) {
 			if (err) {
@@ -25,7 +26,7 @@ module.exports = function(query) {
 				if (err) {
 					throw err;
 				}
-				console.log('hi');
+				console.log('Searching...');
 				var parser = new xml2js.Parser();
 				parser.on('end', function(data) {
 					trackID = data.result.tracks[0].track[0].id[0];
@@ -36,6 +37,8 @@ module.exports = function(query) {
 
 			setTimeout(function() {
 				uri = Spotify.id2uri('track', trackID);
+				enqueue(playQueue, uri);
+				console.log(playQueue);
 			}, 1000);
 
 			setTimeout(function() {
@@ -43,7 +46,7 @@ module.exports = function(query) {
 					if (err) {
 						throw err;
 					}
-
+					console.log('Found!');
 					if (!trackPlaying) {
 						console.log('Playing: %s - %s', track.artist[0].name, track.name);
 						trackPlaying = true;
@@ -59,4 +62,11 @@ module.exports = function(query) {
 			}, 1500);
 
 		});
+};
+
+var enqueue = function(playQueue, uri) {
+	playQueue.push(uri);
+},
+dequeue = function(playQueue) {
+	playQueue.pop();
 };
