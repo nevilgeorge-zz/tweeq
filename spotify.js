@@ -5,6 +5,7 @@ var Spotify = require('spotify-web'),
 	Speaker = require('speaker'),
 	xml2js = require('xml2js'),
 	async = require('async'),
+	EventEmitter = require('events').EventEmitter,
 	login = require('./loginCredentials.js');
 
 var trackPlaying = false,
@@ -12,7 +13,7 @@ var trackPlaying = false,
 	playQueue = [];
 
 module.exports = function(query) {
-	var trackID, uri,
+	var trackID, uri, currentTrack, nextTrack,
 		username = login.spotify.username,
 		password = login.spotify.password;
 
@@ -38,20 +39,20 @@ module.exports = function(query) {
 
 			setTimeout(function() {
 				uri = Spotify.id2uri('track', trackID);
-				enqueue(playQueue, uri);
-				console.log(playQueue);
 			}, 1000);
 
 			setTimeout(function() {
-				spotify.get(playQueue[i], function(err, track) {
+				spotify.get(uri, function(err, track) {
 					if (err) {
 						throw err;
 					}
+
 					console.log('Found!');
-					if (!trackPlaying && typeof(playQueue[i]) !== undefined) {
+					if (!trackPlaying && typeof(track) !== undefined) {
 						playTrack(track);
 					} else {
-						console.log('Queue empty!');
+						enqueue(playQueue, track);
+						console.log(playQueue);
 					}
 				});
 			}, 1500);
@@ -63,7 +64,8 @@ var enqueue = function(playQueue, uri) {
 	playQueue.push(uri);
 },
 dequeue = function(playQueue) {
-	return playQueue.pop();
+	return playQueue.shift();
+
 };
 
 var playTrack = function(track) {
@@ -74,7 +76,12 @@ var playTrack = function(track) {
 	.pipe(new Speaker())
 	.on('finish', function() {
 		trackPlaying = false;
-		dequeue(playQueue);
-		console.log('Track finished.');
+		nextTrack = dequeue(playQueue);
+		if (typeof(nextTrack) !== undefined) {
+			console.log('Getting next track...');
+			playTrack(nextTrack);
+		} else {
+			console.log('Done playing all songs on queue!');
+		}
 	});
 };
