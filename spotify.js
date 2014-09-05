@@ -8,6 +8,7 @@ var Spotify = require('spotify-web'),
 	login = require('./loginCredentials.js');
 
 var trackPlaying = false,
+	i = 0,
 	playQueue = [];
 
 module.exports = function(query) {
@@ -42,21 +43,15 @@ module.exports = function(query) {
 			}, 1000);
 
 			setTimeout(function() {
-				spotify.get(uri, function(err, track) {
+				spotify.get(playQueue[i], function(err, track) {
 					if (err) {
 						throw err;
 					}
 					console.log('Found!');
-					if (!trackPlaying) {
-						console.log('Playing: %s - %s', track.artist[0].name, track.name);
-						trackPlaying = true;
-						track.play()
-							.pipe(new lame.Decoder())
-							.pipe(new Speaker())
-							.on('finish', function() {
-								trackPlaying = false;
-								console.log('Track finished.');
-							});
+					if (!trackPlaying && typeof(playQueue[i]) !== undefined) {
+						playTrack(track);
+					} else {
+						console.log('Queue empty!');
 					}
 				});
 			}, 1500);
@@ -68,5 +63,18 @@ var enqueue = function(playQueue, uri) {
 	playQueue.push(uri);
 },
 dequeue = function(playQueue) {
-	playQueue.pop();
+	return playQueue.pop();
+};
+
+var playTrack = function(track) {
+	console.log('Playing: %s - %s', track.artist[0].name, track.name);
+	trackPlaying = true;
+	track.play()
+	.pipe(new lame.Decoder())
+	.pipe(new Speaker())
+	.on('finish', function() {
+		trackPlaying = false;
+		dequeue(playQueue);
+		console.log('Track finished.');
+	});
 };
