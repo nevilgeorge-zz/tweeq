@@ -4,8 +4,6 @@ var Spotify = require('spotify-web'),
 	lame = require('lame'),
 	Speaker = require('speaker'),
 	xml2js = require('xml2js'),
-	async = require('async'),
-	EventEmitter = require('events').EventEmitter,
 	login = require('./loginCredentials.js');
 
 var trackPlaying = false,
