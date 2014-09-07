@@ -1,6 +1,6 @@
 // socket.js
 
-module.exports = function(io, twitter) {
+module.exports = function(io, twitter, searchItem) {
 	var tweetParser = function(string) {
 		// remove white spaces for both sides of the text
 		string = string.trim(' ');
@@ -15,7 +15,7 @@ module.exports = function(io, twitter) {
 		// returns a concatenated string to be used as a query
 		return wordArray.join(' ');
 	};
-	var stream = twitter.stream('statuses/filter', { track: '@__nevil' });
+	var stream = twitter.stream('statuses/filter', { track: searchItem });
 	io.on('connection', function(socket) {
 		console.log('Listening for tweets...');
 		stream.on('connect', function(request) {

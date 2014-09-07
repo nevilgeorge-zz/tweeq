@@ -10,20 +10,10 @@ var express = require('express'),
 	Twit = require('twit');
 
 // Instantiate the app. Sort of weird because we are instantiating an Express/Socket.io app
-var app = express(),
+var searchItem,
+	app = express(),
 	server = http.Server(app),
 	io = socketio(server);
-
-// Initialize modules
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded());
-// app.use(morgan('dev'));
-// app.use(cookieParser);
-
-// route the index file
-app.get('/', function(req, res) {
-	res.sendfile('index.html');
-});
 
 //Iniitialize twitter client. Hardcoded to always use username __nevil
 var twitter = new Twit({
@@ -33,8 +23,31 @@ var twitter = new Twit({
 		access_token_secret: 'RRUO9wIsOLReZTlngsF2WEwVAYsDlB6EGTwRdKt6tGFpq'
 });
 
-// pass the io instance into the file that handles all socket.io operations
-require('./socket.js')(io, twitter);
+// Initialize modules
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
+// app.use(morgan('dev'));
+// app.use(cookieParser);
+
+// route the index file
+app.get('/', function(req, res) {
+	res.sendfile('index.html');
+});
+
+app.get('/play', function(req, res) {
+	res.sendfile('play.html');
+});
+
+app.post('/play', function(req, res) {
+	if (req.body.handle !== '') {
+		searchItem = req.body.handle;
+	} else if (req.body.username !== '') {
+		searchItem = req.body.username;
+	}
+	// pass the io instance into the file that handles all socket.io operations
+	require('./socket.js')(io, twitter, searchItem);
+	res.redirect('/play');
+});
 
 // listen on port 3030
 server.listen(3030, function() {
