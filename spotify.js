@@ -25,12 +25,13 @@ dequeue = function(playQueue) {
 
 // Plays a track that is passed into the function
 playTrack = function(track, socket) {
+	var speaker = new Speaker();
 	console.log('Playing: %s - %s', track.artist[0].name, track.name);
 	socket.emit('track playing', 'Playing: ' + track.artist[0].name + ' - ' + track.name);
 	trackPlaying = true;
 	track.play()
 	.pipe(new lame.Decoder())
-	.pipe(new Speaker())
+	.pipe(speaker)
 	.on('finish', function() {
 		trackPlaying = false;
 		nextTrack = dequeue(playQueue);
@@ -47,6 +48,10 @@ playTrack = function(track, socket) {
 			console.log('Done playing all songs on queue!');
 			socket.emit('queue done', 'Done playing all songs on queue!');
 		}
+	});
+
+	socket.on('disconnect', function() {
+		speaker.end();
 	});
 };
 

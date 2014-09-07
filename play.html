@@ -7,51 +7,66 @@
 		body {
 			background-color: #AEEDC7;
 		}
-		div {
+		#title {
 			text-align: center;
 			font-family: "Lucida Console", "Lucida Sans Typewriter", Monaco, "Bitstream Vera Sans Mono", monospace;
 			margin-left: auto;
 			margin-right: auto;
 
 		}
+
+		#messageContainer {
+			text-align: center;
+			font-family: "Lucida Console", "Lucida Sans Typewriter", Monaco, "Bitstream Vera Sans Mono", monospace;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
 	</style>
 </head>
 <body>
-	<div>
+	<div id="title">
 		<h1>Tweeq</h1><h3>(name TBD. See definition <a href="http://www.urbandictionary.com/define.php?term=tweeq" target="_blank">here</a>)</h3>
 
 		<h3>Hi.</h3>
+
+		<div id="messageContainer"></div>
 	</div>
+
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	<script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
 	<script>
-		var socket = io();
+		var socket = io(),
+			addMessage = function(message) {
+				$('#messageContainer').append('<h3>' + message + '</h3>');
+			};
 
 		socket.on('listen for tweet', function(message) {
-			console.log(message);
+			addMessage(message);
 		});
 
 		socket.on('searching', function(message) {
-			console.log(message);
+			addMessage(message);
 		});
 
 		socket.on('found', function(message) {
-			console.log(message);
+			addMessage(message);
 		});
 
 		socket.on('added to queue', function(message) {
-			console.log(message);
+			addMessage(message);
 		});
 
 		socket.on('track playing', function(message) {
-			console.log(message);
+			addMessage(message);
 		});
 
 		socket.on('next track', function(message) {
-			console.log(message);
+			addMessage(message);
 		});
 
 		socket.on('queue done', function(message) {
-			console.log(message);
+			addMessage(message);
 		});
 
 
