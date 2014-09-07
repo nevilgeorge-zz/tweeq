@@ -26,6 +26,34 @@
 	<script>
 		var socket = io();
 
+		socket.on('listen for tweet', function(message) {
+			console.log(message);
+		});
+
+		socket.on('searching', function(message) {
+			console.log(message);
+		});
+
+		socket.on('found', function(message) {
+			console.log(message);
+		});
+
+		socket.on('added to queue', function(message) {
+			console.log(message);
+		});
+
+		socket.on('track playing', function(message) {
+			console.log(message);
+		});
+
+		socket.on('next track', function(message) {
+			console.log(message);
+		});
+
+		socket.on('queue done', function(message) {
+			console.log(message);
+		});
+
 
 	</script>
 </body>

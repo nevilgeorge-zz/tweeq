@@ -18,13 +18,14 @@ module.exports = function(io, twitter, searchItem) {
 	var stream = twitter.stream('statuses/filter', { track: searchItem });
 	io.on('connection', function(socket) {
 		console.log('Listening for tweets...');
+		socket.emit('listen for tweet', 'Listening for tweets to ' + searchItem + '...');
 		stream.on('connect', function(request) {
 			console.log('Twitter connection established');
 		});
 		stream.on('tweet', function(tweet) {
 			var query = tweetParser(tweet.text);
 			// pass in the query string to the file that deals with the spotify web API
-			require('./spotify.js')(query);
+			require('./spotify.js')(query, socket);
 		});
 	});
 }

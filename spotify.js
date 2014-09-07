@@ -24,8 +24,9 @@ dequeue = function(playQueue) {
 },
 
 // Plays a track that is passed into the function
-playTrack = function(track) {
+playTrack = function(track, socket) {
 	console.log('Playing: %s - %s', track.artist[0].name, track.name);
+	socket.emit('track playing', 'Playing: ' + track.artist[0].name + ' - ' + track.name);
 	trackPlaying = true;
 	track.play()
 	.pipe(new lame.Decoder())
@@ -40,15 +41,17 @@ playTrack = function(track) {
 		*/
 		if (typeof nextTrack !== 'undefined') {
 			console.log('Getting next track...');
-			playTrack(nextTrack);
+			socket.emit('next track', 'Getting next track...');
+			playTrack(nextTrack, socket);
 		} else {
 			console.log('Done playing all songs on queue!');
+			socket.emit('queue done', 'Done playing all songs on queue!');
 		}
 	});
 };
 
 
-module.exports = function(query) {
+module.exports = function(query, socket) {
 	var trackID, uri, currentTrack, nextTrack,
 		username = login.spotify.username,
 		password = login.spotify.password;
@@ -65,6 +68,7 @@ module.exports = function(query) {
 					throw err;
 				}
 				console.log('Searching...');
+				socket.emit('searching', 'Searching for keywords: ' + query);
 				var parser = new xml2js.Parser();
 				parser.on('end', function(data) {
 					trackID = data.result.tracks[0].track[0].id[0];
@@ -86,13 +90,15 @@ module.exports = function(query) {
 					}
 
 					console.log('Found!');
+					socket.emit('found', 'Track found!');
 					// Check if there is currently a track playing and check if there is another track to be played
 					if (!trackPlaying && typeof track !== 'undefined') {
 						// Only plays the first song in the queue
-						playTrack(track);
+						playTrack(track, socket);
 					} else {
 						enqueue(playQueue, track);
 						console.log(playQueue);
+						socket.emit('added to queue', track.name + ' added to queue!');
 					}
 				});
 			}, 1500);

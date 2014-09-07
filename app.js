@@ -34,10 +34,12 @@ app.get('/', function(req, res) {
 	res.sendfile('index.html');
 });
 
+// route the play file
 app.get('/play', function(req, res) {
 	res.sendfile('play.html');
 });
 
+// POST route to handle submission of the search criteria
 app.post('/play', function(req, res) {
 	if (req.body.handle !== '') {
 		searchItem = req.body.handle;
