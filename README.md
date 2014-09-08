@@ -2,6 +2,7 @@ tweeq
 =====
 
 Node.JS app used to crowdsource party playlists using Twitter and Spotify.
+Uses Express, Socket.io, Twitter Streaming API and Spotify Web API.
 
 The idea of this app originates from the classic scenario at parties where a random computer is playing songs and no one is really in charge of the playlist. With this app running on your computer, anyone can tweet at any given handle/username with his/her desired song title and artist, and the song is found and played from Spotify. If there is already a song being played, the song request is added to a queue. 
 
