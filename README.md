@@ -12,5 +12,6 @@ Anyone can send the tweet "stay with me - sam smith @nevil" and the app will pla
 
 To run:
 
-Clone the repo to any directory. Make sure you have Node.JS installed on your computer. Run `npm install`
-Open Terminal, navigate to the directory you cloned to and execute "node app.js". Redirect your browser to localhost:3030 for a very bare-bones UI.
+Clone the repo to any directory. Make sure you have Node.JS installed on your computer.
+
+Open Terminal, navigate to the directory you cloned to and execute `npm install`. Then, you should be able to run `node app.js` to start the app. Redirect your browser to localhost:3030 for a very bare-bones UI.
